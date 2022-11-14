@@ -12,20 +12,20 @@ if __name__ == '__main__':
     from sys import argv
 
     ids = set()
-    r = requests.get('https://jsonplaceholder.typicode.com/posts')
-    data = r.json()
+    t = requests.get('https://jsonplaceholder.typicode.com/posts')
+    data = t.json()
     for user in data:
         ids.add(user.get('userId'))
 
     output = {}
     for user in ids:
-        r = requests.get('https://jsonplaceholder.typicode.com/users/{}'.
+        t = requests.get('https://jsonplaceholder.typicode.com/users/{}'.
                          format(user))
-        username = r.json().get('username')
+        username = t.json().get('username')
 
-        r = requests.get('https://jsonplaceholder.typicode.com/' +
+        t = requests.get('https://jsonplaceholder.typicode.com/' +
                          'todos?userId={}'.format(user))
-        data = r.json()
+        data = t.json()
 
         output['{}'.format(user)] = []
         for task in data:
