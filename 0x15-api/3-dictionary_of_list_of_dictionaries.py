@@ -12,21 +12,20 @@ if __name__ == '__main__':
     from sys import argv
 
     ids = set()
-    t = requests.get('https://jsonplaceholder.typicode.com/posts')
-    data = t.json()
-
+    r = requests.get('https://jsonplaceholder.typicode.com/posts')
+    data = r.json()
     for user in data:
         ids.add(user.get('userId'))
 
     output = {}
     for user in ids:
-        t = requests.get('https://jsonplaceholder.typicode.com/users/{}'.
+        r = requests.get('https://jsonplaceholder.typicode.com/users/{}'.
                          format(user))
-        username = t.json().get('username')
+        username = r.json().get('username')
 
-        t = requests.get('https://jsonplaceholder.typicode.com/' +
+        r = requests.get('https://jsonplaceholder.typicode.com/' +
                          'todos?userId={}'.format(user))
-        data = t.json()
+        data = r.json()
 
         output['{}'.format(user)] = []
         for task in data:
@@ -35,7 +34,6 @@ if __name__ == '__main__':
                 'completed': task.get('completed'),
                 'username': username
             })
-
     with open('todo_all_employees.json', 'w') as file:
         json.dump({int(x): output[x] for x in output.keys()},
                   file, sort_keys=True)
