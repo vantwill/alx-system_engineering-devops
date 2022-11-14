@@ -1,9 +1,14 @@
 #!/usr/bin/python3
 """
+
 Python script that, using this REST API
+
 (https://jsonplaceholder.typicode.com/), for a given employee ID, returns
+
 information about his/her TODO list progress and to export data in the JSON
+
 format.
+
 """
 
 if __name__ == '__main__':
@@ -11,7 +16,7 @@ if __name__ == '__main__':
     import json
     from sys import argv
 
-    t = requests.get('https://jsonplaceholder.typicode.com/users/{}'.
+  t = requests.get('https://jsonplaceholder.typicode.com/users/{}'.
                      format(argv[1]))
     username = t.json().get('username')
 
