@@ -1,32 +1,22 @@
 #!/usr/bin/python3
-"""
-Python script that, using this REST API
+"""Python script that, using this REST API
 (https://jsonplaceholder.typicode.com/), for a given employee ID, returns
 information about his/her TODO list progress and to export data in the JSON
-format.
-"""
+format."""
+import json
+import requests
+import sys
 
-if __name__ == '__main__':
-    import requests
-    import json
-    from sys import argv
+if __name__ == "__main__":
+    user_id = sys.argv[1]
+    url = "https://jsonplaceholder.typicode.com/"
+    user = requests.get(url + "users/{}".format(user_id)).json()
+    username = user.get("username")
+    todos = requests.get(url + "todos", params={"userId": user_id}).json()
 
-    t = requests.get('https://jsonplaceholder.typicode.com/users/{}'.
-                     format(argv[1]))
-    username = t.json().get('username')
-
-    t = requests.get('https://jsonplaceholder.typicode.com/todos?userId={}'.
-                     format(argv[1]))
-    data = t.json()
-
-    output = {}
-    output['{}'.format(argv[1])] = []
-    for task in data:
-        output['{}'.format(argv[1])].append({
-            'task': task.get('title'),
-            'completed': task.get('completed'),
-            'username': username
-        })
-
-    with open('{}.json'.format(argv[1]), 'w') as file:
-        json.dump(output, file)
+    with open("{}.json".format(user_id), "w") as jsonfile:
+        json.dump({user_id: [{
+                "task": t.get("title"),
+                "completed": t.get("completed"),
+                "username": username
+            } for t in todos]}, jsonfile)
